@@ -8,7 +8,7 @@ http.createServer((request, response) => {
   // Get the URL from the requestdD
   let addr = request.url,
   // Apply the class URL in the addr, parsed URL
-  q = new URL(addr,  'http://' + request.headers.host),
+  q = new URL(addr,  'http://' + request.headers.host);
   // path of the file
   filePath = '';
 
