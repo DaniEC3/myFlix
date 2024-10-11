@@ -3,10 +3,103 @@
   <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet" type="text/css" href="css/styles.css">
     <title>documentation</title>
   </head>
   <body>
     <h1>Documentation Page</h1>
+    <table>
+      <tr>
+        <th>Business Logic</th>
+        <th>URL</th>
+        <th>HTTP method</th>
+        <th>Request body data format</th>
+        <th>Response body data format</th>
+      </tr>
+      <tr>
+        <th>Get a list of all movies</th>
+        <th>/movies</th>
+        <th>GET</th>
+        <th>None</th>
+        <th>A JSON object holding data about all the students</th>
+      </tr>
+      <tr>
+        <th>Get data about a single movie by title</th>
+        <th>/movies/[Name]</th>
+        <th>GET</th>
+        <th>None</th>
+        <th>A JSON object holding data about a single movie, containing an ID, name, director and genre. Example:
+          <br>{<br>"id": 1,<br>"movieName":"Jaws",<br>"movieDirector": "Steven Spielberg", 
+          <br> "movieGenre": "Thriller"<br>}
+        </th>
+      </tr>
+      <tr>
+        <th>Get data about a genre by name/title</th>
+        <th>/movies/genre/<br>[Name]</th>
+        <th>GET</th>
+        <th>None</th>
+        <th>A JSON object holding data about the genre. Example:
+          <br>{<br>movieGenre: "Thriller",<br>movieDescription:"Thriller is a genre of fiction with numerous,
+          often overlapping, subgenres, including crime, horror, and detective fiction."
+        </th>
+      </tr>
+      <tr>
+        <th>Get data about the director by name</th>
+        <th>/movies/director/<br>[Name]</th>
+        <th>GET</th>
+        <th>None</th>
+        <th>A JSON object holding data about a the genre. Example:
+          <br>{<br>"directorName": "Steven Spielberg",<br>"directorBirthYear":"1946",
+          <br>"directorDeathYear": "", <br>"directorBio":"Jaws"<br>}
+        </th>
+      </tr>
+      <tr>
+        <th>Create new user</th>
+        <th>/users/[UserName]</th>
+        <th>POST</th>
+        <th>A JSON object holding data about the user to create:
+          <br>{<br>"userName":"UserExample123",<br>"password": "PasswordExample123",
+          <br> "email": "emailExample@example.com"<br>}
+        </th>
+        <th>A JSON object holding data about the user was created. Example:
+          <br>{<br>"userName":"UserExample123",<br>"password": "PasswordExample123",
+          <br> "email": "emailExample@example.com"<br>}
+        </th>
+      </tr>
+      <tr>
+        <th>Update user info</th>
+        <th>/users/[UserName]/<br>update/[NewUserName]</th>
+        <th>PUT</th>
+        <th>None</th>
+        <th>A text message indicating whether the user name was updated</th>
+      </tr>
+      <tr>
+        <th>Add a movie by name</th>
+        <th>users/[UserName]/<br>movies/[movieName]</th>
+        <th>POST</th>
+        <th>A JSON object holding data about the movie to add:
+          <br>{<br>"movieName":"Jaws",<br>"movieDirector": "Steven Spielberg", <br> "movieGenre": "Thriller"<br>}
+        </th>
+        <th>A JSON object holding data about the user was created, including an ID. Example:
+          <br>{<br>"id": 1,<br>"movieName":"Jaws",<br>"movieDirector": "Steven Spielberg", 
+          <br> "movieGenre": "Thriller"<br>}
+        </th>
+      </tr>
+      <tr>
+        <th>Remove a movie</th>
+        <th>users/[UserName]/<br>movies/[MovieName]</th>
+        <th>DELETE</th>
+        <th>None</th>
+        <th>A text message indicating the user movie was removed</th>
+      </tr>
+      <tr>
+        <th>Delete user</th>
+        <th>/users/[UserID]</th>
+        <th>DELETE</th>
+        <th>None</th>
+        <th>A text message indicating the user was deleted</th>
+      </tr>
+    </table>
   </body>
 
-</html>
+</html >
