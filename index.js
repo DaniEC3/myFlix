@@ -43,21 +43,21 @@ app.get('/movies/:name', (req, res) => {
 
 // Return data about a genre (description) by name/title 
 
-app.get('/movies/genre/:name', (req, res) => {
+app.get('/genres/:name', (req, res) => {
   const movieName = req.params.name; // Access the movie name from the URL
   res.send(`The genre: ${movieName}`);
 });
 
 // Return data about a director (bio, birth year, death year) by name
 
-app.get('/movies/director/:name', (req, res) => {
+app.get('/directors/:name', (req, res) => {
   const movieName = req.params.name; // Access the movie name from the URL
   res.send(`The director: ${movieName}`);
 });
 
 // Allow new users to register
 
-app.post('/users', (req, res) => {
+app.post('/users/create', (req, res) => {
   let newUser = req.body;
 
   // Check for the required userName field
@@ -82,7 +82,7 @@ app.put('/users/:user/update/:newUser', (req,res) =>{
 
 // Allow users to add a movie to their list of favorites
 
-app.post('/users/:userName/movies/:ID', (req, res) => {
+app.post('/users/:userName/movies/:name', (req, res) => {
   let newMovie = req.body;
 
   // Check for the required userName field
