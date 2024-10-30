@@ -10,14 +10,14 @@
     <h1>Documentation Page</h1>
     <table>
       <tr>
-        <th>Business Logic</th>
+        <th><br>Business Logic<br><br></th>
         <th>URL</th>
         <th>HTTP method</th>
         <th>Request body data format</th>
         <th>Response body data format</th>
       </tr>
       <tr>
-        <th>Get a list of all movies</th>
+        <th><br>Get a list of all movies<br><br></th>
         <th>/movies</th>
         <th>GET</th>
         <th>None</th>
@@ -28,10 +28,12 @@
         <th>/movies/[Name]</th>
         <th>GET</th>
         <th>None</th>
-        <th>A JSON object holding data about a single movie, containing an ID, name,description,genre, director and year released. Example:
+        <th><br>A JSON object holding data about a single movie, containing an ID, name,description,genre, director and year released. Example:
           <br>{<br>"_id": ObjectId,<br>"name":"The Godfather",<br>"description": "An organized crime dynasty's aging
           patriarch transfers control of his clandestine empire to his reluctant son.", 
-          <br> "genre": ObjectId,<br>"director": ObjectId,<br>year_released: ISODate('1972-03-24T00:00:00.000Z')<br>}
+          <br> "genre": ObjectId,<br>"director": ObjectId,<br>year_released: ISODate('1972-03-24T00:00:00.000Z'),<br>
+          "imagePath": "/images/default.jpg"<br>
+        }<br><br>
         </th>
       </tr>
       <tr>
@@ -39,9 +41,9 @@
         <th>/genres/<br>[Name]</th>
         <th>GET</th>
         <th>None</th>
-        <th>A JSON object holding data about the genre. Example:
+        <th><br>A JSON object holding data about the genre. Example:
           <br>{<br>"_id": ObjectId,<br>"name": "Comedy",<br>"description":"Films intended to make the audience laugh,
-          with a focus on humorous situations and characters.",<br>"audience": "All Ages"<br>}
+          with a focus on humorous situations and characters.",<br>"audience": "All Ages"<br>}<br><br>
         </th>
       </tr>
       <tr>
@@ -49,11 +51,29 @@
         <th>/directors/<br>[Name]</th>
         <th>GET</th>
         <th>None</th>
-        <th>A JSON object holding data about a the director. Example:
+        <th><br>A JSON object holding data about a the director. Example:
           <br>{<br>"_id": ObjectId<br>"name": "Christopher Nolan",<br>"bio":"Christopher Nolan
           is a British-American filmmaker known for mind-bending movies such as Inception and 
           The Dark Knight trilogy.",<br>"birthYear": ISODate('1970-07-30T00:00:00.000Z'),
-          <br>"deadYear": null<br>}
+          <br>"deadYear": null<br>}<br><br>
+        </th>
+      </tr>
+      <tr>
+        <th><br>Get a list of all users<br><br></th>
+        <th>/Users</th>
+        <th>GET</th>
+        <th>None</th>
+        <th>A JSON object holding data about all the students</th>
+      </tr>
+      <tr>
+        <th><br>Get data about a single user by username <br><br></th>
+        <th>/Users/[UserName]</th>
+        <th>GET</th>
+        <th>None</th>
+        <th><br>A JSON object holding data about the user. Example:
+          <br>{<br>"_id": ObjectId,<br>"userName": "jdoe123",<br>"password": "SecurePassword312"
+          <br>"first_Name": "John"<br>"last_Name": "Doe"<br>"email": "johndoe@example.com"
+          <br>"birthDay": "1990-01-15"<br>"FavoriteMovies": [ObjectId]<br>}<br><br>
         </th>
       </tr>
       <tr>
@@ -61,26 +81,26 @@
         <th>/users/create</th>
         <th>POST</th>
         <th>A JSON object holding data about the user to create:
-          <br>{<br>"userName":"UserExample123",<br>"password": "PasswordExample123",
-          <br>first_Name: "David"<br>last_Name: "Johnson"<br> "email": "emailExample@example.com"
-          <br>birthDay: '1995-07-25'<br>}
+          <br>{<br>"userName": "UserExample123",<br>"password": "PasswordExample123",
+          <br>"first_Name": "David"<br>"last_Name": "Johnson"<br> "email": "emailExample@example.com"
+          <br>"birthDay": '1995-07-25'<br>}
         </th>
-        <th>A JSON object holding data about the user was created. Example:
+        <th><br>A JSON object holding data about the user was created. Example:
           <br>{<br>"_id": ObjectId<br>"userName":"UserExample123",<br>"password": "PasswordExample123",
           <br>first_Name: "David"<br>last_Name: "Johnson"
-          <br> "email": "emailExample@example.com"
-          <br>birthDay: '1995-07-25'<br>}
+          <br> "email": "emailEx@example.com"
+          <br>birthDay: '1995-07-25'<br>}<br><br>
         </th>
       </tr>
       <tr>
-        <th>Update user info</th>
-        <th>/users/[UserName]/<br>update/[NewUserName]</th>
+        <th><br>Update user info<br><br></th>
+        <th><br>/users/[UserName]/<br>[UserPassword]<br>update/[InfoToUpdate][NewInfo]<br><br></th>
         <th>PUT</th>
         <th>None</th>
         <th>A text message indicating whether the user name was updated</th>
       </tr>
       <tr>
-        <th>Add a movie by name</th>
+        <th><br>Add a movie by name<br><br></th>
         <th>users/[UserName]/<br>movies/[movieName]</th>
         <th>POST</th>
         <th>None
@@ -89,14 +109,14 @@
         </th>
       </tr>
       <tr>
-        <th>Remove a movie</th>
+        <th><br>Remove a movie<br><br></th>
         <th>users/[UserName]/<br>movies/[MovieName]</th>
         <th>DELETE</th>
         <th>None</th>
         <th>A text message indicating the user movie was removed</th>
       </tr>
       <tr>
-        <th>Delete user</th>
+        <th><br>Delete user<br><br></th>
         <th>/users/[UserID]</th>
         <th>DELETE</th>
         <th>None</th>
