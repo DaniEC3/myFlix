@@ -1,34 +1,39 @@
 const express = require("express");
 const app = express();
-
-app.use(express.json());
-app.use(express.urlencoded({ extended: true }));
-
 const path = require("path");
 const fs = require("fs");
-const morgan = require('morgan');
+const morgan = require("morgan");
 const mongoose = require("mongoose");
-const Models = require('./models.js')
-const bodyParser = require('body-parser');
-const { forEach } = require("lodash");
+const Models = require("./models.js");
+const lodash = require("lodash");
+const passport = require("passport");
 
 const Movies = Models.Movie;
 const Users = Models.User;
 const Directors = Models.Director;
 const Genres = Models.Genre;
 
-uuid = require('uuid'); //Universally Unique Identifier
+const uuid = require("uuid"); // Universally Unique Identifier
 
-mongoose.connect('mongodb://localhost:27017/myFlixDB', { useNewUrlParser: true, useUnifiedTopology: true });
+// Connect to MongoDB
+mongoose.connect("mongodb://localhost:27017/myFlixDB", {
+  useNewUrlParser: true,
+  useUnifiedTopology: true,
+});
 
-// create a write stream (in append mode)
-// a ‘log.txt’ file is created in root directory
-const accessLogStream = fs.createWriteStream(path.join(__dirname, 'log.txt'), {flags: 'a'});
+app.use(express.json());
+app.use(express.urlencoded({ extended: true }));
 
+// Create a write stream (in append mode) for logging
+const accessLogStream = fs.createWriteStream(path.join(__dirname, "log.txt"), {
+  flags: "a",
+});
 
-// app.use(bodyParser.json()); //the data will be expected to be in JSON format 
-app.use(morgan('combined', {stream: accessLogStream}));
+app.use(morgan("combined", { stream: accessLogStream }));
 
+// Authentication setup
+let auth = require("./auth")(app); // This ensures that Express is available in your "auth.js" file as well.
+require("./passport");
 
 app.get('/' , (req , res) => {
   res.send('Welcome to the test.');
@@ -36,7 +41,7 @@ app.get('/' , (req , res) => {
 
 // Return a list of ALL movies to the user
 
-app.get('/movies', async (req, res) => {
+app.get('/movies', passport.authenticate('jwt', {session: false}), async (req, res) => {
   try {
     const movies = await Movies.find();
     res.status(200).json(movies); // Changed to 200 for successful GET
@@ -48,7 +53,7 @@ app.get('/movies', async (req, res) => {
 
 // Get data about a single movie by title
 
-app.get('/movies/:name', async (req, res) => {
+app.get('/movies/:name', passport.authenticate('jwt', { session:false }), async (req, res) => {
   try {
     const movie = await Movies.findOne({ name: req.params.name }); // Use findOne with filter for specific movie
     if (movie) {
@@ -64,7 +69,7 @@ app.get('/movies/:name', async (req, res) => {
 
 // Return data about a genre (description) by name/title 
 
-app.get('/genres/:name', async (req, res) => {
+app.get('/genres/:name', passport.authenticate('jwt', { session:false }), async (req, res) => {
   try {
     const genre = await Genres.findOne({ name: req.params.name }); // Use findOne with filter for specific user
     if (genre) {
@@ -80,7 +85,7 @@ app.get('/genres/:name', async (req, res) => {
 
 // Return data about a director (bio, birth year, death year) by name
 
-app.get('/directors/:name', async (req, res) => {
+app.get('/directors/:name', passport.authenticate('jwt', { session:false }), async (req, res) => {
   try {
     const director = await Directors.findOne({ name: req.params.name }); // Use findOne with filter for specific user
     if (director) {
@@ -96,7 +101,7 @@ app.get('/directors/:name', async (req, res) => {
 
 // Get all users
 
-app.get('/users', async (req, res) => {
+app.get('/users', passport.authenticate('jwt', { session:false }), async (req, res) => {
   try {
     const users = await Users.find();
     res.status(200).json(users); // Changed to 200 for successful GET
@@ -108,7 +113,7 @@ app.get('/users', async (req, res) => {
 
 // Get a user by username
 
-app.get('/users/:userName', async (req, res) => {
+app.get('/users/:userName', passport.authenticate('jwt', { session:false }), async (req, res) => {
   try {
     const user = await Users.findOne({ userName: req.params.userName }); // Use findOne with filter for specific user
     if (user) {
@@ -161,7 +166,7 @@ app.post('/users/create', async (req, res) => {
   }
 });
 
-// Allow users to update their user info (username)
+// Allow users to update their user info
 
 /* We’ll expect JSON in this format
 {
@@ -169,7 +174,8 @@ app.post('/users/create', async (req, res) => {
   (required)
 }*/
 
-app.put('/users/:user/:password/update/:InfoToUpdate/:NewInfo', async (req, res) => {
+app.put('/users/:user/:password/update/:InfoToUpdate/:NewInfo', passport
+  .authenticate('jwt', { session:false }), async (req, res) => {
   try {
     const user = await Users.findOne({ userName: req.params.user });
     if (!user) {
@@ -224,7 +230,8 @@ app.put('/users/:user/:password/update/:InfoToUpdate/:NewInfo', async (req, res)
   (required)
 }*/
 
-app.post('/users/:userName/movies/:movieName', async (req, res) => {
+app.post('/users/:userName/movies/:movieName', passport.authenticate('jwt', { session:
+  false }), async (req, res) => {
   try {
     // Find the user by username
     const user = await Users.findOne({ userName: req.params.userName });
@@ -257,7 +264,8 @@ app.post('/users/:userName/movies/:movieName', async (req, res) => {
 
 // Allow users to remove a movie from their list of favorites
 
-app.delete('/users/:userName/movies/:movieName', (req, res) => {
+app.delete('/users/:userName/movies/:movieName', passport
+  .authenticate('jwt', { session:false }), (req, res) => {
   const movieName = req.params.movieName; // Access the movie name from the URL
   res.send(`The movie: ${movieName} was deleted`);
 });
@@ -265,7 +273,7 @@ app.delete('/users/:userName/movies/:movieName', (req, res) => {
 // Allow existing users to deregister by userName
 // (showing only a text that a user email has been removed—more on this later).
 
-app.delete('/users/:name', async (req, res) => {
+app.delete('/users/:name', passport.authenticate('jwt', { session:false }), async (req, res) => {
   try {
     // Find the user by username
     const userToDelete = await Users.findOne({ userName: req.params.name });
