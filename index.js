@@ -7,6 +7,7 @@ const mongoose = require("mongoose");
 const Models = require("./models.js");
 const lodash = require("lodash");
 const passport = require("passport");
+const { check, validationResult } = require('express-validator');
 
 const Movies = Models.Movie;
 const Users = Models.User;
@@ -30,6 +31,24 @@ const accessLogStream = fs.createWriteStream(path.join(__dirname, "log.txt"), {
 });
 
 app.use(morgan("combined", { stream: accessLogStream }));
+
+const cors = require('cors');
+
+let allowedOrigins = ['http://localhost:8080', 'http://testsite.com'];
+
+// Creates a list of allowed domains within the variable allowedOrigins
+
+app.use(cors({
+  origin: (origin, callback) => {
+    if(!origin) return callback(null, true);
+    if(allowedOrigins.indexOf(origin) === -1){ // If a specific origin isn’t found on the list of allowed origins
+      let message = 'The CORS policy for this application doesn’t allow access from origin ' + origin;
+      return callback(new Error(message ), false);
+    }
+    return callback(null, true);
+  }
+}));
+
 
 // Authentication setup
 let auth = require("./auth")(app); // This ensures that Express is available in your "auth.js" file as well.
@@ -129,20 +148,38 @@ app.get('/users/:userName', passport.authenticate('jwt', { session:false }), asy
 
 // Allow new users to register
 
-app.post('/users/create', async (req, res) => {
+app.post('/users/create',
+  
+  //Express Validator
+  [
+  check('userName', 'Username is required').isLength({ min: 5 }).isAlphanumeric(),
+  check('password', 'Password is required').not().isEmpty(),
+  check('password', 'Password must contain at least one uppercase letter').matches(/[A-Z]/),
+  check('password', 'Password must contain at least one number').matches(/\d/),
+  check('password', 'Password must contain at least one special character (except < or >)').matches(/[!@#$%^&*(),.?":{}|\\[\]\/+=-_]/),
+  check('email', 'Email does not appear to be valid').isEmail()
+  ], async (req, res) => {
+
+  // check the validation object for errors
+  let errors = validationResult(req);
+
+  if (!errors.isEmpty()) {
+    return res.status(422).json({ errors: errors.array() });
+  }
+
+
+  let hashedPassword = Users.hashPassword(req.body.password);
 
   //const userName = req.body.userName;
-  //const password = req.body.password;
   //const email = req.body.email;
   //const first_Name = req.body.first_Name;
   //const last_Name = req.body.last_Name;
   //const birthDay = req.body.birthDay;
   //const FavoriteMovies = req.body.FavoriteMovies;
-
-  const { userName, password, email, first_Name, last_Name, birthDay, FavoriteMovies } = req.body;
+  const { userName, email, first_Name, last_Name, birthDay, FavoriteMovies } = req.body;
 
   if (!userName) return res.status(400).send('Username is required.');
-  if (!password) return res.status(400).send('Password is required.');
+  if (!hashedPassword) return res.status(400).send('Password is required.');
   if (!email) return res.status(400).send('Email is required.');
   try {
     const existingUser = await Users.findOne({ userName: req.body.userName });
@@ -152,7 +189,7 @@ app.post('/users/create', async (req, res) => {
     // Create new user if not found
     const newUser = await Users.create({
       userName: req.body.userName,
-      password: req.body.password,
+      password: hashedPassword,
       first_Name: req.body.first_Name,
       last_Name: req.body.last_Name,
       email: req.body.email,
@@ -174,7 +211,9 @@ app.post('/users/create', async (req, res) => {
   (required)
 }*/
 
-app.put('/users/:user/:password/update/:InfoToUpdate/:NewInfo', passport
+app.put('/users/:user/:password/update/:InfoToUpdate/:NewInfo',[
+  check('Password', 'Password is required').not().isEmpty()], 
+  passport 
   .authenticate('jwt', { session:false }), async (req, res) => {
   try {
     const user = await Users.findOne({ userName: req.params.user });

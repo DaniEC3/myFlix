@@ -1,30 +1,35 @@
 const passport = require('passport'),
 //takes a username and password from the request body and
 //uses Mongoose to check your database for a user with the same username
-  LocalStrategy = require('passport-local').Strategy,
-  Models = require('./models.js'),
-  passportJWT = require('passport-jwt');
+LocalStrategy = require('passport-local').Strategy,
+Models = require('./models.js'),
+passportJWT = require('passport-jwt');
 
-  let Users = Models.User,
-  JWTStrategy = passportJWT.Strategy,
-  ExtractJWT = passportJWT.ExtractJwt;
+let Users = Models.User,
+JWTStrategy = passportJWT.Strategy,
+ExtractJWT = passportJWT.ExtractJwt;
 
 
 passport.use(
   new LocalStrategy(
     {
-      usernameField: 'Username',
-      passwordField: 'Password',
+      usernameField: 'userName',
+      passwordField: 'password',
     },
-    async (username, password, callback) => {
-      console.log(`${username} ${password}`);
-      await Users.findOne({ userName: username })
+    async (userName, password, callback) => {
+      console.log(`${userName} ${password}`);
+      await Users.findOne({ userName: userName })
       .then((user) => {
         if (!user) {
           console.log('incorrect username');
           return callback(null, false, {
             message: 'Incorrect username or password.',
           });
+        }
+        if (!user.validatePassword(password)) { //Hash any password entered by the user when 
+          //logging in before comparing it to the password stored in MongoDB
+          console.log('incorrect password');
+          return callback(null, false, { message: 'Incorrect password.' });
         }
         console.log('finished');
         return callback(null, user);
