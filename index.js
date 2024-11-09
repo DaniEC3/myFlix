@@ -152,11 +152,24 @@ app.post('/users/create',
   
   //Express Validator
   [
-  check('userName', 'Username is required').isLength({ min: 5 }).isAlphanumeric(),
-  check('password', 'Password is required').not().isEmpty(),
-  check('password', 'Password must contain at least one uppercase letter').matches(/[A-Z]/),
-  check('password', 'Password must contain at least one number').matches(/\d/),
-  check('password', 'Password must contain at least one special character (except < or >)').matches(/[!@#$%^&*(),.?":{}|\\[\]\/+=-_]/),
+  check('userName')
+  .isLength({ min: 5 })
+  .withMessage('Username must be at least 5 characters long')
+  .isAlphanumeric()
+  .withMessage('Username must contain only letters and numbers'),
+  
+  check('password')
+  .isLength({ min: 8 })
+  .withMessage('Password must be at least 8 characters long')
+  .matches(/\d/)
+  .withMessage('Password must contain at least one number')
+  .matches(/[A-Z]/)
+  .withMessage('Password must contain at least one uppercase letter')
+  .matches(/[a-z]/)
+  .withMessage('Password must contain at least one lowercase letter')
+  .matches(/[!@#$%^&*(),.?":{}|\\[\]\/+=-_]/)
+  .withMessage('Password must contain at least one special character'),
+
   check('email', 'Email does not appear to be valid').isEmail()
   ], async (req, res) => {
 
@@ -205,58 +218,70 @@ app.post('/users/create',
 
 // Allow users to update their user info
 
-/* We’ll expect JSON in this format
-{
-  password: String,
-  (required)
-}*/
+app.put('/users/update', 
+  
+  //Express Validator
 
-app.put('/users/:user/:password/update/:InfoToUpdate/:NewInfo',[
-  check('Password', 'Password is required').not().isEmpty()], 
-  passport 
-  .authenticate('jwt', { session:false }), async (req, res) => {
+  [
+  check('userName')
+  .optional()
+  .isLength({ min: 5 })
+  .withMessage('Username must be at least 5 characters long')
+  .isAlphanumeric()
+  .withMessage('Username must contain only letters and numbers'),
+
+  check('password')
+  .optional()
+  .isLength({ min: 8 })
+  .withMessage('Password must be at least 8 characters long')
+  .matches(/\d/)
+  .withMessage('Password must contain at least one number')
+  .matches(/[A-Z]/)
+  .withMessage('Password must contain at least one uppercase letter')
+  .matches(/[a-z]/)
+  .withMessage('Password must contain at least one lowercase letter')
+  .matches(/[!@#$%^&*(),.?":{}|\\[\]\/+=-_]/)
+  .withMessage('Password must contain at least one special character'),
+
+  check('email')
+  .optional()
+  .isEmail()
+  .withMessage('Email does not appear to be valid')
+  ],
+
+  async (req, res) => {
+
+  // check the validation object for errors
+  let errors = validationResult(req);
+
+  if (!errors.isEmpty()) {
+    return res.status(422).json({ errors: errors.array() });
+  }
+
+  let hashedPassword = Users.hashPassword(req.body.password);
+
+  // Extract sensitive data from the body
+  const { userName, password, first_Name, last_Name, email, birthDay} = req.body;
+  
   try {
-    const user = await Users.findOne({ userName: req.params.user });
+    const user = await User.findOne({ userName });  // Find user by username or ID
     if (!user) {
-      return res.status(400).send(`User: ${req.params.user} not found.`);
+      return res.status(404).send('User not found');
     }
-    
-    // Check if the provided password matches the user's password
-    if (req.params.password !== user.password) {
-      return res.status(400).send('Password is not correct.');
-    }
-    
-    const infoToUpdate = req.params.InfoToUpdate;
-    const newInfo = req.params.NewInfo;
 
-    // Allowed properties to update
-    const allowedUpdates = {
-      userName: 'userName',
-      password: 'password',
-      first_Name: 'first_Name',
-      last_Name: 'last_Name',
-      email: 'email',
-    };
+    // Update user data
+    user.email = email;
+    user.first_Name = first_Name;
+    user.first_Name = last_Name;
+    user.birthDay = new Date(birthDay);  // Ensure correct format
+    await user.save();  // Save the updated user object
 
-    if (allowedUpdates[infoToUpdate]) {
-      const updateObject = { [allowedUpdates[infoToUpdate]]: newInfo };
-
-      const updatedUser = await Users.findOneAndUpdate(
-        { userName: req.params.user },
-        { $set: updateObject },
-        { new: true } // Return the updated document
-      );
-
-      res.status(200).send('Information updated');
-    } else {
-      res.status(400).send('Parameter to update not found.');
-    }
+    res.status(200).send('User information updated successfully');
   } catch (error) {
     console.error(error);
-    res.status(500).send('Error: ' + error);
+    res.status(500).send('Server error');
   }
 });
-
 
 
 
