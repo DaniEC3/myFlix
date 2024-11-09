@@ -82,21 +82,26 @@
         <th>POST</th>
         <th>A JSON object holding data about the user to create:
           <br>{<br>"userName": "UserExample123",<br>"password": "PasswordExample123",
-          <br>"first_Name": "David"<br>"last_Name": "Johnson"<br> "email": "emailExample@example.com"
+          <br>"first_Name": "David",<br>"last_Name": "Johnson",<br> "email": "emailExample@example.com",
           <br>"birthDay": '1995-07-25'<br>}
         </th>
         <th><br>A JSON object holding data about the user was created. Example:
-          <br>{<br>"_id": ObjectId<br>"userName":"UserExample123",<br>"password": "PasswordExample123",
-          <br>first_Name: "David"<br>last_Name: "Johnson"
-          <br> "email": "emailEx@example.com"
+          <br>{<br>"_id": ObjectId,<br>"userName":"UserExample123",<br>"password": "PasswordExample123",
+          <br>"first_Name": "David",<br>"last_Name": "Johnson",
+          <br> "email": "emailEx@example.com",
           <br>birthDay: '1995-07-25'<br>}<br><br>
         </th>
       </tr>
       <tr>
         <th><br>Update user info<br><br></th>
-        <th><br>/users/[UserName]/<br>[UserPassword]<br>update/[InfoToUpdate][NewInfo]<br><br></th>
+        <th><br>/users/update<br>/[UserName]<br><br></th>
         <th>PUT</th>
-        <th>None</th>
+        <th><br>A JSON object holding data about necessary information to update. Example:
+          <br>{<br>"userName":"UserExample123" (Optional),<br>"password": "PasswordExample123" (Optional),
+          <br>"first_Name": "David" (Optional),<br>"last_Name": "Johnson" (Optional),
+          <br> "email": "emailEx@example.com" (Optional),
+          <br>birthDay: '1995-07-25' (Optional)<br>}<br><br>
+        </th>
         <th>A text message indicating whether the user name was updated</th>
       </tr>
       <tr>

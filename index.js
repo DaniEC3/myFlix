@@ -218,70 +218,79 @@ app.post('/users/create',
 
 // Allow users to update their user info
 
-app.put('/users/update', 
-  
-  //Express Validator
+app.put('/users/update/:userName',
 
+  // Express Validator
   [
-  check('userName')
-  .optional()
-  .isLength({ min: 5 })
-  .withMessage('Username must be at least 5 characters long')
-  .isAlphanumeric()
-  .withMessage('Username must contain only letters and numbers'),
+    check('userName')
+      .optional()
+      .isLength({ min: 5 })
+      .withMessage('Username must be at least 5 characters long')
+      .isAlphanumeric()
+      .withMessage('Username must contain only letters and numbers'),
 
-  check('password')
-  .optional()
-  .isLength({ min: 8 })
-  .withMessage('Password must be at least 8 characters long')
-  .matches(/\d/)
-  .withMessage('Password must contain at least one number')
-  .matches(/[A-Z]/)
-  .withMessage('Password must contain at least one uppercase letter')
-  .matches(/[a-z]/)
-  .withMessage('Password must contain at least one lowercase letter')
-  .matches(/[!@#$%^&*(),.?":{}|\\[\]\/+=-_]/)
-  .withMessage('Password must contain at least one special character'),
+    check('password')
+      .optional()
+      .isLength({ min: 8 })
+      .withMessage('Password must be at least 8 characters long')
+      .matches(/\d/)
+      .withMessage('Password must contain at least one number')
+      .matches(/[A-Z]/)
+      .withMessage('Password must contain at least one uppercase letter')
+      .matches(/[a-z]/)
+      .withMessage('Password must contain at least one lowercase letter')
+      .matches(/[!@#$%^&*(),.?":{}|\\[\]\/+=-_]/)
+      .withMessage('Password must contain at least one special character'),
 
-  check('email')
-  .optional()
-  .isEmail()
-  .withMessage('Email does not appear to be valid')
+    check('email')
+      .optional()
+      .isEmail()
+      .withMessage('Email does not appear to be valid')
   ],
 
   async (req, res) => {
 
-  // check the validation object for errors
-  let errors = validationResult(req);
-
-  if (!errors.isEmpty()) {
-    return res.status(422).json({ errors: errors.array() });
-  }
-
-  let hashedPassword = Users.hashPassword(req.body.password);
-
-  // Extract sensitive data from the body
-  const { userName, password, first_Name, last_Name, email, birthDay} = req.body;
-  
-  try {
-    const user = await User.findOne({ userName });  // Find user by username or ID
-    if (!user) {
-      return res.status(404).send('User not found');
+    // Check for validation errors
+    let errors = validationResult(req);
+    if (!errors.isEmpty()) {
+      return res.status(422).json({ errors: errors.array() });
     }
 
-    // Update user data
-    user.email = email;
-    user.first_Name = first_Name;
-    user.first_Name = last_Name;
-    user.birthDay = new Date(birthDay);  // Ensure correct format
-    await user.save();  // Save the updated user object
+    const { userName, password, first_Name, last_Name, email, birthDay } = req.body;
 
-    res.status(200).send('User information updated successfully');
-  } catch (error) {
-    console.error(error);
-    res.status(500).send('Server error');
+    try {
+      // Find user by username
+      const user = await Users.findOne({ userName: req.params.userName });
+      if (!user) {
+        return res.status(404).send('User not found');
+      }
+
+      // Update user details if provided
+      if (userName) user.userName = userName;
+      if (email) user.email = email;
+      if (first_Name) user.first_Name = first_Name;
+      if (last_Name) user.last_Name = last_Name;
+
+      if (password) {
+        user.password = Users.hashPassword(password); // Hash and update password
+      }
+
+      if (birthDay) {
+        const birthDate = new Date(birthDay);
+        if (isNaN(birthDate.getTime())) {
+          return res.status(400).send('Invalid date format for birthDay.');
+        }
+        user.birthDay = birthDate;
+      }
+
+      await user.save();  // Save the updated user object
+      res.status(200).send('User information updated successfully');
+    } catch (error) {
+      console.error(error);
+      res.status(500).send('Server error');
+    }
   }
-});
+);
 
 
 
