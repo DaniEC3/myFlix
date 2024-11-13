@@ -22,6 +22,11 @@ const uuid = require("uuid"); // Universally Unique Identifier
 //   useUnifiedTopology: true,
 // });
 
+mongoose.connect(process.env.CONNECTION_URI, {
+  useNewUrlParser: true,
+  useUnifiedTopology: true,
+});
+
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 
