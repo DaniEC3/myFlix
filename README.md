@@ -69,7 +69,6 @@ The myFlix API allows users to create an account, update their profile, and mana
 2. Install dependencies:
    ```bash
    npm install
-   cd myFlix
 3. Set up your MongoDB connection in the project:
    Update your MongoDB URI in the codebase. For example:
    ```bash
