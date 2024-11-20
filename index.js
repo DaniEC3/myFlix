@@ -156,9 +156,7 @@ app.post('/users/create',
   .matches(/[A-Z]/)
   .withMessage('Password must contain at least one uppercase letter')
   .matches(/[a-z]/)
-  .withMessage('Password must contain at least one lowercase letter')
-  .matches(/[!@#$%^&*(),.?":{}|\\[\]\/+=-_]/)
-  .withMessage('Password must contain at least one special character'),
+  .withMessage('Password must contain at least one lowercase letter'),
 
   check('email', 'Email does not appear to be valid').isEmail()
   ], async (req, res) => {
@@ -228,9 +226,7 @@ app.put('/users/update/:userName',
       .matches(/[A-Z]/)
       .withMessage('Password must contain at least one uppercase letter')
       .matches(/[a-z]/)
-      .withMessage('Password must contain at least one lowercase letter')
-      .matches(/[!@#$%^&*(),.?":{}|\\[\]\/+=-_]/)
-      .withMessage('Password must contain at least one special character'),
+      .withMessage('Password must contain at least one lowercase letter'),
 
     check('email')
       .optional()
@@ -327,11 +323,33 @@ app.post('/users/:userName/movies/:movieName', passport.authenticate('jwt', { se
 
 // Allow users to remove a movie from their list of favorites
 
-app.delete('/users/:userName/movies/:movieName', passport
-  .authenticate('jwt', { session:false }), (req, res) => {
-  const movieName = req.params.movieName; // Access the movie name from the URL
-  res.send(`The movie: ${movieName} was deleted`);
-});
+app.delete('/users/:userName/movies/:movieName', 
+  passport.authenticate('jwt', { session: false }), 
+  async (req, res) => { // Add `async` to the function
+    const { userName, movieName } = req.params; // Correct typo from `paramse` to `params`
+
+    try {
+      const movie = await Movies.findOne({name: movieName});
+      if(!movie){
+        return res.status(400).send(`Movie "${movieName}" not found.`);
+      }
+
+      const result = await Users.updateOne(
+        { userName: userName },               // Find the user by username
+        { $pull: { FavoriteMovies: movie._id } } // Correct `$pull` syntax
+      );
+      if (result.modifiedCount > 0) {
+        res.status(200).send(`Successfully removed "${movieName}" from ${userName}'s favorites.`);
+      } else {
+        res.status(404).send(`User "${userName}" or movie "${movieName}" not found.`);
+      }
+    } catch (err) {
+      console.error("Error removing favorite movie:", err);
+      res.status(500).send("Internal server error.");
+    }
+  }
+);
+
 
 // Allow existing users to deregister by userName
 // (showing only a text that a user email has been removed—more on this later).
