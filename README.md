@@ -168,8 +168,8 @@ This project is licensed under the MIT License - see the [LICENSE](LICENSE) file
 
 For more information, feel free to reach out to the project maintainer:
 
-- **Email**: example@example.com  
-- **GitHub**: [https://github.com/<your-username>/myFlix](https://github.com/<your-username>/myFlix)
+- **Email**: daniel.escldrn@gmail.com
+- **GitHub**: [https://github.com/DaniEC3/myFlix](https://github.com/DaniEC3/myFlix)
 
 
 
