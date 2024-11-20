@@ -93,6 +93,20 @@
         </th>
       </tr>
       <tr>
+        <th>Log in to an account</th>
+        <th>/login</th>
+        <th>POST</th>
+        <th>A JSON object holding data about the user information:
+          <br>{<br>"userName": "UserExample123",<br>"password": "PasswordExample123",<br>}
+        </th>
+        <th><br>A JSON object holding data about the user information. Example:
+          <br>{<br>"_id": ObjectId,<br>"userName":"UserExample123",<br>"password": "PasswordExample123",
+          <br>"first_Name": "David",<br>"last_Name": "Johnson",
+          <br> "email": "emailEx@example.com",
+          <br>birthDay: '1995-07-25'<br>}<br><br>
+        </th>
+      </tr>
+      <tr>
         <th><br>Update user info<br><br></th>
         <th><br>/users/update<br>/[UserName]<br><br></th>
         <th>PUT</th>
