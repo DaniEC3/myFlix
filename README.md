@@ -94,7 +94,7 @@ The myFlix API allows users to create an account, update their profile, and mana
   - Updates the user's information, such as their password or email.
 
 - **Delete user account**:  
-  `DELETE /users/delete/:userName`
+  `DELETE /users/:userID`
   - Deletes the user's account and associated data.
 
 ### **Movies Endpoints**
@@ -104,15 +104,15 @@ The myFlix API allows users to create an account, update their profile, and mana
   - Retrieves all movies in the database.
   
 - **Get a movie by title**:  
-  `GET /movies/:movieTitle`
+  `GET /movies/:movieName`
   - Retrieves details of a specific movie by its title.
 
 - **Add a movie to favorites**:  
-  `POST /users/:userName/movies/:movieTitle`
+  `POST /users/:userName/movies/:movieName`
   - Adds a movie to the user's list of favorite movies.
 
 - **Remove a movie from favorites**:  
-  `DELETE /users/:userName/movies/:movieTitle`
+  `DELETE /users/:userName/movies/:movieName`
   - Removes a movie from the user's list of favorite movies.
 
 ---
