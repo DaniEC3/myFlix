@@ -1,174 +1,155 @@
-myFlix API
-A web application that provides users with information about movies, directors, and genres. Users can create accounts, update their profiles, add or remove favorite movies, and access a comprehensive collection of films.
+# **myFlix API**
 
-Features
-User Authentication:
-Users can register, log in, and authenticate using JSON Web Tokens (JWT).
+A comprehensive web application providing users with detailed information about movies, genres, and directors. Users can sign up, log in, manage their profiles, and create a list of favorite movies. This API is designed for seamless integration with both client-side and server-side applications.
 
-User Management:
+---
 
-Register a new user.
-Update user details such as username, password, or email.
-Delete a user profile.
-Movie Database:
+## **Table of Contents**
 
-Get detailed information about movies, genres, and directors.
-Add movies to a user's list of favorites.
-Remove movies from a user's list of favorites.
-Logging:
+1. [Features](#features)  
+2. [Technologies Used](#technologies-used)  
+3. [Installation](#installation)  
+4. [API Endpoints](#api-endpoints)  
+5. [Example Requests](#example-requests)  
+6. [Logging](#logging)  
+7. [Error Handling](#error-handling)  
+8. [Future Enhancements](#future-enhancements)  
+9. [License](#license)  
+10. [Contact](#contact)
 
-Morgan is used to log HTTP requests to the console.
-Logs are stored persistently using the File System (fs) module for debugging and auditing purposes.
-Technologies Used
-Backend:
+---
 
-Node.js
-Express.js
-Database:
+## **Features**
 
-MongoDB (Atlas & local setup)
-Authentication & Authorization:
+- **User Management**:  
+  - Register, log in, and authenticate users using JSON Web Tokens (JWT).  
+  - Update user details (e.g., username, email, password).  
+  - Delete user accounts.
 
-Passport.js
-JWT (JSON Web Tokens)
-Validation:
+- **Movies and Favorites**:  
+  - Access a database of movies, genres, and directors.  
+  - Add or remove movies from a user's list of favorites.
 
-express-validator
-Logging:
+- **Security**:  
+  - Passwords are hashed for secure storage.  
+  - API endpoints are protected using Passport.js with JWT strategy.
 
-Morgan (HTTP request logger)
-File System (for saving logs)
-Development Tools:
+- **Logging**:  
+  - **Morgan** for HTTP request logging in the console.  
+  - Persistent logs stored using Node.js's **File System (fs)** module for auditing.
 
-Postman (for API testing)
-Endpoints Overview
-Users
-POST /users/create
+---
 
-Register a new user.
-Required fields:
-userName: Must be alphanumeric and at least 5 characters long.
-password: Must include at least 8 characters, one number, one uppercase, one lowercase, and one special character.
-email: Must be a valid email address.
-PUT /users/update/:userName
+## **Technologies Used**
 
-Update user information (e.g., email or password).
-DELETE /users/delete/:userName
+- **Backend**:  
+  - Node.js  
+  - Express.js  
 
-Delete a user account.
-Movies
-GET /movies
+- **Database**:  
+  - MongoDB (Atlas & local setup)  
 
-Get a list of all movies.
-GET /movies/:title
+- **Authentication & Authorization**:  
+  - Passport.js  
+  - JWT  
 
-Get information about a specific movie by title.
-GET /genres/:name
+- **Validation**:  
+  - express-validator  
 
-Get detailed information about a genre.
-GET /directors/:name
+- **Logging**:  
+  - Morgan  
+  - File System (fs)  
 
-Get detailed information about a director.
-Favorite Movies
-POST /users/:userName/movies/:movieId
+- **Development Tools**:  
+  - Postman (for API testing)
 
-Add a movie to a user's favorites list.
-DELETE /users/:userName/movies/:movieId
+---
 
-Remove a movie from a user's favorites list.
-Setup and Installation
-Prerequisites
-Ensure you have the following installed on your machine:
+## **Installation**
 
-Node.js
-MongoDB (local or Atlas setup)
-Installation Steps
-Clone the repository:
+### **Prerequisites**
 
-bash
-Copy code
-git clone <repository_url>  
-cd myFlix  
-Install dependencies:
+1. Install **Node.js** and **npm**:  
+   [Download Node.js](https://nodejs.org/)  
 
-bash
-Copy code
-npm install  
-Set up your MongoDB connection:
+2. Set up **MongoDB**:  
+   - Use MongoDB Atlas (cloud) or install MongoDB locally.
 
-Update your MongoDB connection URI in the project. For example:
-javascript
-Copy code
-const uri = 'mongodb+srv://<username>:<password>@moviesdata.mongodb.net/myFlixDB';
-Enable logging with Morgan and File System:
+---
 
-Morgan is preconfigured to log HTTP requests in the console.
-Logs are saved in a log.txt file using the File System module.
-Code snippet:
+### **Steps to Run Locally**
 
-javascript
-Copy code
-const morgan = require('morgan');  
-const fs = require('fs');  
-const path = require('path');  
+1. Clone the repository:  
+   ```bash
+   git clone https://github.com/<your-username>/myFlix.git
+   cd myFlix
+2. Install dependencies:
+   ```bash
+   npm install
+   cd myFlix
+3. Set up your MongoDB connection in the project:
+   Update your MongoDB URI in the codebase. For example:
+   ```bash
+   const uri = 'mongodb+srv://<username>:<password>@moviesdata.mongodb.net/myFlixDB';
+4. Start the server:
+   ```bash
+   npm start
+5. Test the API using Postman or a similar tool
+ 
+## **API Endpoints**
 
-// Create a write stream for the logs  
-const logStream = fs.createWriteStream(path.join(__dirname, 'log.txt'), { flags: 'a' });  
+### **User Endpoints**
 
-// Use Morgan to log requests  
-app.use(morgan('combined', { stream: logStream }));  
-Start the server:
+- **Register a user**:  
+  - `POST /users/create`
 
-bash
-Copy code
-npm start  
-Test the API using tools like Postman or cURL.
+- **Update user details**:  
+  - `PUT /users/update/:userName`
 
-Authentication
-All secured endpoints require a valid JWT token. Pass the token in the Authorization header as:
+- **Delete user account**:  
+  - `DELETE /users/delete/:userName`
 
-php
-Copy code
-Bearer <your_token>
-Example API Usage
-Register a User
-POST /users/create
+### **Movies Endpoints**
 
-json
-Copy code
-{
-  "userName": "JohnDoe",
-  "password": "P@ssword123",
-  "email": "johndoe@example.com"
-}
-Add a Favorite Movie
-POST /users/JohnDoe/movies/63ef12b4fca53b74ff3d7e91
+- **Get all movies**:  
+  - `GET /movies`
 
-json
-Copy code
-Authorization: Bearer <your_token>
-Remove a Favorite Movie
-DELETE /users/JohnDoe/movies/63ef12b4fca53b74ff3d7e91
+- **Get movie by title**:  
+  - `GET /movies/:movieTitle`
 
-json
-Copy code
-Authorization: Bearer <your_token>
-Get All Movies
-GET /movies
+- **Add a movie to favorites**:  
+  - `POST /users/:userName/movies/:movieTitle`
 
-Error Handling
-400 Bad Request: Missing or invalid parameters in the request.
-401 Unauthorized: Invalid or missing JWT token.
-404 Not Found: Resource not found (e.g., movie, user).
-500 Internal Server Error: Server-side issue.
-Future Enhancements
-Add client-side support for React.js.
-Implement additional filtering and sorting options for movies.
-Add support for social login (e.g., Google, Facebook).
-License
-This project is licensed under the MIT License.
+- **Remove a movie from favorites**:  
+  - `DELETE /users/:userName/movies/:movieTitle`
 
-Contact
-If you have questions or suggestions, please contact:
-Name: Daniel
-Email: daniel@example.com
+---
+
+## **Example Requests**
+
+### **Add a movie to favorites**
+
+```bash
+POST /users/TheGratoNE/movies/Inception
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
