@@ -104,6 +104,18 @@ app.get('/genres/:name', passport.authenticate('jwt', { session:false }), async 
   }
 });
 
+// Return a list of ALL directors to the user
+
+app.get('/directors', passport.authenticate('jwt', {session: false}), async (req, res) => {
+  try {
+    const directors = await Directors.find();
+    res.status(200).json(directors); // Changed to 200 for successful GET
+  } catch (err) {
+    console.error(err);
+    res.status(500).send('Error: ' + err);
+  }
+});
+
 // Return data about a director (bio, birth year, death year) by name
 
 app.get('/directors/:name', passport.authenticate('jwt', { session:false }), async (req, res) => {
