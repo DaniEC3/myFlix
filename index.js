@@ -76,6 +76,18 @@ app.get('/movies/:name', passport.authenticate('jwt', { session:false }), async 
   }
 });
 
+// Return a list of ALL genres to the user
+
+app.get('/genres', passport.authenticate('jwt', {session: false}), async (req, res) => {
+  try {
+    const genres = await Genres.find();
+    res.status(200).json(genres); // Changed to 200 for successful GET
+  } catch (err) {
+    console.error(err);
+    res.status(500).send('Error: ' + err);
+  }
+});
+
 // Return data about a genre (description) by name/title 
 
 app.get('/genres/:name', passport.authenticate('jwt', { session:false }), async (req, res) => {
