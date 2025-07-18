@@ -1,4 +1,45 @@
-/**
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width,initial-scale=1">
+    <title>index.js - Documentation</title>
+
+    <script src="scripts/prettify/prettify.js"></script>
+    <script src="scripts/prettify/lang-css.js"></script>
+    <!--[if lt IE 9]>
+      <script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+    <![endif]-->
+    <link type="text/css" rel="stylesheet" href="https://code.ionicframework.com/ionicons/2.0.1/css/ionicons.min.css">
+    <link type="text/css" rel="stylesheet" href="styles/prettify-tomorrow.css">
+    <link type="text/css" rel="stylesheet" href="styles/jsdoc-default.css">
+</head>
+<body>
+
+<input type="checkbox" id="nav-trigger" class="nav-trigger" />
+<label for="nav-trigger" class="navicon-button x">
+  <div class="navicon"></div>
+</label>
+
+<label for="nav-trigger" class="overlay"></label>
+
+<nav>
+    <li class="nav-link nav-home-link"><a href="index.html">Home</a></li><li class="nav-heading"><a href="global.html">Globals</a></li><li class="nav-item"><span class="nav-item-type type-function">F</span><span class="nav-item-name"><a href="global.html#addFavoriteMovie">addFavoriteMovie</a></span></li><li class="nav-item"><span class="nav-item-type type-function">F</span><span class="nav-item-name"><a href="global.html#createUser">createUser</a></span></li><li class="nav-item"><span class="nav-item-type type-function">F</span><span class="nav-item-name"><a href="global.html#deleteUserByUsername">deleteUserByUsername</a></span></li><li class="nav-item"><span class="nav-item-type type-function">F</span><span class="nav-item-name"><a href="global.html#getAllDirectors">getAllDirectors</a></span></li><li class="nav-item"><span class="nav-item-type type-function">F</span><span class="nav-item-name"><a href="global.html#getAllGenres">getAllGenres</a></span></li><li class="nav-item"><span class="nav-item-type type-function">F</span><span class="nav-item-name"><a href="global.html#getAllUsers">getAllUsers</a></span></li><li class="nav-item"><span class="nav-item-type type-function">F</span><span class="nav-item-name"><a href="global.html#getDirectorByName">getDirectorByName</a></span></li><li class="nav-item"><span class="nav-item-type type-function">F</span><span class="nav-item-name"><a href="global.html#getGenreByName">getGenreByName</a></span></li><li class="nav-item"><span class="nav-item-type type-function">F</span><span class="nav-item-name"><a href="global.html#getMovieByName">getMovieByName</a></span></li><li class="nav-item"><span class="nav-item-type type-function">F</span><span class="nav-item-name"><a href="global.html#getMovies">getMovies</a></span></li><li class="nav-item"><span class="nav-item-type type-function">F</span><span class="nav-item-name"><a href="global.html#getUserByUsername">getUserByUsername</a></span></li><li class="nav-item"><span class="nav-item-type type-function">F</span><span class="nav-item-name"><a href="global.html#removeFavoriteMovie">removeFavoriteMovie</a></span></li><li class="nav-item"><span class="nav-item-type type-function">F</span><span class="nav-item-name"><a href="global.html#updateUser">updateUser</a></span></li>
+</nav>
+
+<div id="main">
+    
+    <h1 class="page-title">index.js</h1>
+    
+
+    
+
+
+
+    
+    <section>
+        <article>
+            <pre class="prettyprint source linenums"><code>/**
  * @typedef Movie
  * @property {string} name
  * @property {string} description
@@ -14,7 +55,7 @@
  * @property {string} first_Name
  * @property {string} last_Name
  * @property {Date} birthDay
- * @property {Array<string>} FavoriteMovies
+ * @property {Array&lt;string>} FavoriteMovies
  */
 
 
@@ -69,7 +110,7 @@ app.get('/', (req, res) => {
  * @route GET /movies
  * @summary Return a list of ALL movies to the user
  * @security JWT
- * @returns {Array<Movie>} 200 - An array of movie objects
+ * @returns {Array&lt;Movie>} 200 - An array of movie objects
  * @returns {Error} 500 - Unexpected error
  */
 
@@ -119,7 +160,7 @@ app.get('/movies/:name', passport.authenticate('jwt', { session: false }), getMo
  * @route GET /genres
  * @summary Return a list of ALL genres to the user
  * @security JWT
- * @returns {Array<Object>} 200 - An array of genre objects
+ * @returns {Array&lt;Object>} 200 - An array of genre objects
  * @returns {Error} 500 - Unexpected error
  */
 async function getAllGenres(req, res) {
@@ -165,7 +206,7 @@ app.get('/genres/:name', passport.authenticate('jwt', { session: false }), getGe
  * @route GET /directors
  * @summary Return a list of ALL directors to the user
  * @security JWT
- * @returns {Array<Object>} 200 - An array of director objects
+ * @returns {Array&lt;Object>} 200 - An array of director objects
  * @returns {Error} 500 - Unexpected error
  */
 async function getAllDirectors(req, res) {
@@ -212,7 +253,7 @@ app.get('/directors/:name', passport.authenticate('jwt', { session: false }), ge
  * @route GET /users
  * @summary Get all users
  * @security JWT
- * @returns {Array<User>} 200 - An array of user objects
+ * @returns {Array&lt;User>} 200 - An array of user objects
  * @returns {Error} 500 - Unexpected error
  */
 async function getAllUsers(req, res) {
@@ -488,4 +529,22 @@ app.use((err, req, res, next) => {
 const port = process.env.PORT || 8080;
 app.listen(port, '0.0.0.0', () => {
   console.log('Listening on Port ' + port);
-});
+});</code></pre>
+        </article>
+    </section>
+
+
+
+
+</div>
+
+<br class="clear">
+
+<footer>
+    Generated by <a href="https://github.com/jsdoc3/jsdoc">JSDoc 4.0.4</a> using the Minami theme.
+</footer>
+
+<script>prettyPrint();</script>
+<script src="scripts/linenumber.js"></script>
+</body>
+</html>

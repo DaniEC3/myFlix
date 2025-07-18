@@ -1,0 +1,17 @@
+{
+  "source": {
+    "include": ["index.js"],
+    "includePattern": ".js$"
+  },
+  "opts": {
+    "template": "node_modules/minami",
+    "destination": "./docs",
+    "recurse": true,
+    "verbose": true
+  },
+  "templates": {
+    "default": {
+      "includeDate": false
+    }
+  }
+}
