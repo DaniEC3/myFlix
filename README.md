@@ -10,13 +10,16 @@ A comprehensive web application providing users with detailed information about 
 2. [Features](#features)
 3. [Technologies Used](#technologies-used)
 4. [Installation](#installation)
-5. [API Endpoints](#api-endpoints)
-6. [Example Requests](#example-requests)
-7. [Logging](#logging)
-8. [Error Handling](#error-handling)
-9. [Future Enhancements](#future-enhancements)
-10. [License](#license)
-11. [Contact](#contact)
+5. [Environment Variables](#environment-variables)
+6. [API Endpoints](#api-endpoints)
+7. [Example Requests](#example-requests)
+8. [Logging](#logging)
+9. [Error Handling](#error-handling)
+10. [Future Enhancements](#future-enhancements)
+11. [License](#license)
+12. [Contact](#contact)
+13. [Contributing](#contributing)
+14. [API Documentation](#api-documentation)
 
 ---
 
@@ -77,6 +80,21 @@ The myFlix API allows users to create an account, update their profile, and mana
    ```bash
    npm start
 5. Test the API using Postman or a similar tool
+## **Environment Variables**
+
+Set the following environment variables before running the application:
+
+- `CONNECTION_URI`: MongoDB connection string.
+- `PORT`: Optional server port (defaults to `8080`).
+- `JWT_SECRET`: Secret used to sign JWT tokens (update `auth.js` and `passport.js` if you change it).
+
+Example:
+```bash
+export CONNECTION_URI=<your-mongodb-uri>
+export PORT=8080 # optional
+export JWT_SECRET=<your-secret>
+npm start
+```
 
 ---
 
@@ -170,6 +188,17 @@ For more information, feel free to reach out to the project maintainer:
 
 - **Email**: daniel.escldrn@gmail.com
 - **GitHub**: [https://github.com/DaniEC3/myFlix](https://github.com/DaniEC3/myFlix)
+
+## **Contributing**
+
+Contributions are welcome! Feel free to open issues or submit pull requests. Please describe the purpose of your change and update documentation when applicable.
+
+## **API Documentation**
+
+Generated docs are available in `public/docs`. To regenerate them after modifying the code run:
+```bash
+npm run docs
+```
 
 
 
